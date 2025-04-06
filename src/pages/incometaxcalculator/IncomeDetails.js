@@ -1,70 +1,67 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const IncomeDetails = ({ onNext, onBack }) => {
-  const [income, setIncome] = useState({
-    salary: '',
-    interest: '',
-    rental: '',
-    capitalGains: '',
-    other: ''
-  });
-
-  const handleChange = (e) => {
-    setIncome({ ...income, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onNext(income);
-  };
-
+const IncomeDetails = ({ formData, handleChange }) => {
   return (
-    <div className="tax-form-section">
-      <h2>Income Details</h2>
-      <form onSubmit={handleSubmit}>
-        <table className="form-table">
-          <tbody>
-            <tr>
-              <td><label>Income from Salary</label></td>
-              <td>
-                <input
-                  type="number"
-                  name="salary"
-                  value={income.salary}
-                  onChange={handleChange}
-                  required
-                />
-              </td>
-            </tr>
-            <tr>
-              <td><label>Income from Interest</label></td>
-              <td>
-                <input
-                  type="number"
-                  name="interest"
-                  value={income.interest}
-                  onChange={handleChange}
-                />
-              </td>
-            </tr>
-            <tr>
-              <td><label>Rental Income</label></td>
-              <td>
-                <input
-                  type="number"
-                  name="rental"
-                  value={income.rental}
-                  onChange={handleChange}
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div className="form-actions">
-          <button type="button" onClick={onBack} className="btn-back">Back</button>
-          <button type="submit" className="btn-next">Continue</button>
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-gray-700">Income Details</h2>
+      
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Salary Income (₹)</label>
+          <input
+            type="number"
+            name="salary"
+            value={formData.salary}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
         </div>
-      </form>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">House Property Income (₹)</label>
+          <input
+            type="number"
+            name="houseProperty"
+            value={formData.houseProperty}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Capital Gains (₹)</label>
+          <input
+            type="number"
+            name="capitalGains"
+            value={formData.capitalGains}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Other Sources Income (₹)</label>
+          <input
+            type="number"
+            name="otherSources"
+            value={formData.otherSources}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Business/Profession Income (₹)</label>
+          <input
+            type="number"
+            name="businessProfession"
+            value={formData.businessProfession}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+      </div>
     </div>
   );
 };
