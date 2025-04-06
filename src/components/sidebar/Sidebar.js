@@ -19,7 +19,7 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen }) => {
       <nav>
         <ul>
           <li>
-            <Link to="/home">
+            <Link to="/">
               <FaHome className="nav-icon" />
               <span className={isSidebarOpen ? 'show' : 'hide'}>Home</span>
             </Link>
