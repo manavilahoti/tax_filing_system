@@ -1,5 +1,4 @@
 import React from 'react';
-
 const Deductions = ({ formData, handleChange }) => {
   return (
     <div className="space-y-6">
