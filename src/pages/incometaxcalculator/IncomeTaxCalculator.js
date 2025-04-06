@@ -18,7 +18,7 @@ const IncomeTaxCalculator = () => {
     otherSources: 0,
     businessProfession: 0,
     
-    // Deductions
+
     section80C: 0,
     section80D: 0,
     section80G: 0,
@@ -26,7 +26,7 @@ const IncomeTaxCalculator = () => {
     section24: 0,
     otherDeductions: 0,
     
-    // Regime selection
+
     regime: 'new',
   });
 
@@ -54,14 +54,12 @@ const IncomeTaxCalculator = () => {
     <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold text-gray-800 mb-6">Income Tax Calculator</h1>
       
-      {/* Progress Bar */}
       <div className="w-full bg-gray-200 rounded-full h-2.5 mb-8">
-        <div 
+        <div
           className={`bg-blue-600 h-2.5 rounded-full ${activeTab === 'basic' ? 'w-1/4' : activeTab === 'income' ? 'w-2/4' : activeTab === 'deductions' ? 'w-3/4' : 'w-full'}`}
         ></div>
       </div>
       
-      {/* Tabs Navigation */}
       <div className="flex mb-6 border-b border-gray-200">
         <button
           className={`py-2 px-4 font-medium ${activeTab === 'basic' ? 'text-blue-600 border-b-2 border-blue-600' : 'text-gray-500'}`}
@@ -92,7 +90,6 @@ const IncomeTaxCalculator = () => {
         </button>
       </div>
       
-      {/* Tab Content */}
       <div className="p-4">
         {activeTab === 'basic' && (
           <BasicDetails formData={formData} handleChange={handleChange} />
@@ -108,7 +105,6 @@ const IncomeTaxCalculator = () => {
         )}
       </div>
       
-      {/* Navigation Buttons */}
       <div className="flex justify-between mt-6">
         {activeTab !== 'basic' && (
           <button
