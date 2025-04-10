@@ -31,7 +31,7 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen }) => {
             </Link>
           </li>
           <li>
-            <Link to="/upload">
+            <Link to="/docs-upload">
               <FaFileUpload className="nav-icon" />
               <span className={isSidebarOpen ? 'show' : 'hide'}>Upload Documents</span>
             </Link>
