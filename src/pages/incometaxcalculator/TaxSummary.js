@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import Sidebar from '../../components/sidebar/Sidebar';
+import React, { useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -28,7 +27,6 @@ const calculateTax = (formData, regime) => {
     parseFloat(formData.otherSources || 0) +
     parseFloat(formData.businessProfession || 0);
 
-  // Calculate deductions based on regime
   let totalDeductions = 0;
   let taxableIncome = totalIncome;
 
@@ -86,12 +84,7 @@ const calculateTax = (formData, regime) => {
 };
 
 const TaxSummary = ({ formData }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState(true);
-
-  const toggleSidebar = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
-
+  const printRef = useRef();
   const oldRegime = calculateTax(formData, 'old');
   const newRegime = calculateTax(formData, 'new');
 
@@ -138,22 +131,115 @@ const TaxSummary = ({ formData }) => {
     },
   };
 
+  const handlePrint = () => {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Tax Summary</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; }
+            h1, h2 { color: #333; }
+            .summary-section { margin-bottom: 30px; }
+            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+            .tax-comparison { margin-top: 20px; }
+            .recommendation { background: #f8f9fa; padding: 15px; border-radius: 5px; margin-top: 20px; }
+            img { max-width: 100%; height: auto; }
+          </style>
+        </head>
+        <body>
+          <div id="print-content">
+            <h1 style="text-align: center; margin-bottom: 30px;">Income Tax Summary</h1>
+            
+            <div class="summary-section">
+              <h2 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Basic Details</h2>
+              <div class="grid">
+                <div>
+                  <p><strong>Name:</strong> ${formData.name || 'Not provided'}</p>
+                  <p><strong>Age:</strong> ${formData.age || 'Not provided'}</p>
+                  <p><strong>Gender:</strong> ${formData.gender || 'Not provided'}</p>
+                  <p><strong>Residential Status:</strong> ${formData.residentialStatus === 'nri' ? 'NRI' : 'Resident'}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-section">
+              <h2 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Income Details (₹)</h2>
+              <div class="grid">
+                <p><strong>Salary Income:</strong> ${formData.salary?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>House Property Income:</strong> ${formData.houseProperty?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Capital Gains:</strong> ${formData.capitalGains?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Other Sources Income:</strong> ${formData.otherSources?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Business/Profession Income:</strong> ${formData.businessProfession?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Total Income:</strong> ${oldRegime.totalIncome.toLocaleString('en-IN')}</p>
+              </div>
+            </div>
+
+            <div class="summary-section">
+              <h2 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Deductions (₹)</h2>
+              <div class="grid">
+                <p><strong>Section 80C:</strong> ${formData.section80C?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Section 80D:</strong> ${formData.section80D?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Section 80G:</strong> ${formData.section80G?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Section 80E:</strong> ${formData.section80E?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Section 24:</strong> ${formData.section24?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Other Deductions:</strong> ${formData.otherDeductions?.toLocaleString('en-IN') || '0'}</p>
+                <p><strong>Total Deductions:</strong> ${oldRegime.totalDeductions.toLocaleString('en-IN')}</p>
+              </div>
+            </div>
+
+            <div class="summary-section tax-comparison">
+              <h2 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Tax Comparison</h2>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+                <div>
+                  <h3 style="margin-bottom: 15px;">Old Tax Regime</h3>
+                  <p><strong>Taxable Income:</strong> ₹${oldRegime.taxableIncome.toLocaleString('en-IN')}</p>
+                  <p><strong>Tax Payable:</strong> ₹${oldRegime.tax.toLocaleString('en-IN')}</p>
+                </div>
+                <div>
+                  <h3 style="margin-bottom: 15px;">New Tax Regime</h3>
+                  <p><strong>Taxable Income:</strong> ₹${newRegime.taxableIncome.toLocaleString('en-IN')}</p>
+                  <p><strong>Tax Payable:</strong> ₹${newRegime.tax.toLocaleString('en-IN')}</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="summary-section recommendation">
+              <h2 style="border-bottom: 1px solid #ddd; padding-bottom: 10px; margin-bottom: 20px;">Recommendation</h2>
+              <p>
+                The <strong>${oldRegime.tax < newRegime.tax ? 'Old Regime' : 'New Regime'}</strong> is more beneficial for you.
+                You can save <strong>₹${Math.abs(oldRegime.tax - newRegime.tax).toLocaleString('en-IN')}</strong> by choosing
+                the ${oldRegime.tax < newRegime.tax ? 'Old' : 'New'} Regime.
+              </p>
+            </div>
+
+            <div style="margin-top: 40px; font-size: 0.8em; color: #666;">
+              <p>Generated on: ${new Date().toLocaleDateString()}</p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `);
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
+  };
+
   return (
-    <div className="flex bg-gray-50">
-      {/* Sidebar */}
-      <Sidebar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
+    <div className="bg-gray-50 p-6" ref={printRef}>
+      <div className="max-w-6xl mx-auto space-y-8">
+        <h2 className="text-2xl font-semibold text-gray-800">Tax Summary</h2>
 
-      <div className="space-y-8">
-        <h2 className="text-xl font-semibold text-gray-700">Tax Summary</h2>
-
-        <div className="bg-gray-50 p-6 rounded-lg">
+        <div className="bg-white p-6 rounded-lg shadow-md">
           <div className="h-80">
             <Bar data={barChartData} options={options} />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <div className="bg-blue-50 p-6 rounded-lg border border-blue-200 shadow-sm">
             <h3 className="text-lg font-medium text-blue-800 mb-4">Old Tax Regime</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
@@ -175,7 +261,7 @@ const TaxSummary = ({ formData }) => {
             </div>
           </div>
 
-          <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+          <div className="bg-red-50 p-6 rounded-lg border border-red-200 shadow-sm">
             <h3 className="text-lg font-medium text-red-800 mb-4">New Tax Regime</h3>
             <div className="space-y-3">
               <div className="flex justify-between">
@@ -198,13 +284,11 @@ const TaxSummary = ({ formData }) => {
           </div>
         </div>
 
-        <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+        <div className="mt-6 p-6 bg-yellow-50 border border-yellow-200 rounded-lg shadow-sm">
           <h3 className="text-lg font-medium text-yellow-800 mb-2">Recommendation</h3>
           <p className="text-gray-700">
             Based on your income and deductions, the{' '}
-            <span
-              className={`font-bold ${oldRegime.tax < newRegime.tax ? 'text-blue-800' : 'text-red-800'}`}
-            >
+            <span className={`font-bold ${oldRegime.tax < newRegime.tax ? 'text-blue-800' : 'text-red-800'}`}>
               {oldRegime.tax < newRegime.tax ? 'Old Regime' : 'New Regime'}
             </span>{' '}
             is more beneficial for you. You can save{' '}
@@ -213,6 +297,15 @@ const TaxSummary = ({ formData }) => {
             </span>{' '}
             by choosing the {oldRegime.tax < newRegime.tax ? 'Old' : 'New'} Regime.
           </p>
+        </div>
+
+        <div className="flex justify-end">
+          <button
+            onClick={handlePrint}
+            className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Print Summary
+          </button>
         </div>
       </div>
     </div>
