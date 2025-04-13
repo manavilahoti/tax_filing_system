@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import IncomeTaxCalculator from './pages/incometaxcalculator/IncomeTaxCalculator';
 import TaxSlabs from './pages/TaxSlab';
 import DocsUpload from './pages/DocsUpload';
+import ITRFiling from './pages/ITRfiling/ITRFiling';
 import './App.css';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="/income-tax" element={<IncomeTaxCalculator />} />
           <Route path="/tax-slabs" element={<TaxSlabs />} />
           <Route path="/docs-upload" element={<DocsUpload />} />
+          <Route path="/ITR-filing" element={<ITRFiling />} />
         </Routes>
       </div>
     </Router>

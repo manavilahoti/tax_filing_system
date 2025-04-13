@@ -37,7 +37,7 @@ const Sidebar = ({ toggleSidebar, isSidebarOpen }) => {
             </Link>
           </li>
           <li>
-            <Link to="/itr">
+            <Link to="/itr-filing">
               <FaFileInvoice className="nav-icon" />
               <span className={isSidebarOpen ? 'show' : 'hide'}>File ITR</span>
             </Link>

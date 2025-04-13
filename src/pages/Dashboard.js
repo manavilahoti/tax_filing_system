@@ -63,7 +63,7 @@ function Dashboard() {
               <h2>File Your ITR</h2>
               <p>Complete and submit your income tax return</p>
               <div className="button-container">
-                <Link to="/itr" className="card-button">File ITR</Link>
+                <Link to="/itr-filing" className="card-button">File ITR</Link>
               </div>
             </div>
           </div>

@@ -21,7 +21,6 @@ const DocumentUpload = () => {
       return;
     }
 
-    // Simulate upload progress
     const interval = setInterval(() => {
       setUploadProgress((prev) => {
         if (prev >= 100) {
@@ -32,7 +31,6 @@ const DocumentUpload = () => {
       });
     }, 300);
 
-    // Simulate API call
     setTimeout(() => {
       const newDocument = {
         id: Date.now(),
@@ -55,16 +53,14 @@ const DocumentUpload = () => {
   };
 
   return (
-    <div className="flex bg-gray-50 min-h-screen">
-      {/* Sidebar */}
+    <div className="flex bg-gray-50 min-h-screen p-6">
       <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       
-      {/* Main Content */}
+
       <div className={`flex-1 transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
           <h1 className="text-2xl font-bold text-gray-800 mb-6">Document Upload</h1>
-          
-          {/* Upload Form */}
+
           <div className="mb-8 p-6 border border-gray-200 rounded-lg">
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Document Name</label>
@@ -115,7 +111,6 @@ const DocumentUpload = () => {
             </button>
           </div>
           
-          {/* Documents List */}
           <div>
             <h2 className="text-xl font-semibold mb-4">Uploaded Documents</h2>
             {documents.length === 0 ? (
